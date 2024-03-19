@@ -4,20 +4,11 @@
 __all__ = ["RQBottleneckTransformer", "make_model"]
 
 # %% ../nbs/2B. Whisper quantization (semantic token) model.ipynb 2
-import io
-import sys
-import time
 import torch
 import torchaudio
 
 # %% ../nbs/2B. Whisper quantization (semantic token) model.ipynb 3
-from pathlib import Path
-import json
-from fastprogress import progress_bar, master_bar
-import fastprogress
 import numpy as np
-import pylab as plt
-import pandas as pd
 import random
 
 import whisper
@@ -25,11 +16,7 @@ from huggingface_hub import hf_hub_download
 from fastcore.basics import store_attr
 
 from torch import nn
-import torch.optim as optim
 import torch.nn.functional as F
-from torch.utils.data.dataloader import DataLoader
-import webdataset as wds
-from . import utils
 
 from vector_quantize_pytorch import ResidualVQ
 
@@ -72,15 +59,6 @@ def merge_in(dataset_fun):
             yield news
 
     return merge_loop
-
-
-# %% ../nbs/2B. Whisper quantization (semantic token) model.ipynb 10
-def derived_dataset(kind, key="audio"):
-    def deriver(url):
-        url = str(Path(url).parent / (Path(url).name.replace(key, kind) + ".gz"))
-        return wds.WebDataset(wds.SimpleShardList([url])).decode()
-
-    return deriver
 
 
 # %% ../nbs/2B. Whisper quantization (semantic token) model.ipynb 17

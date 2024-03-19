@@ -1,7 +1,7 @@
 import argparse
 import torch
 
-from whisperspeech.pipeline import Pipeline
+from pipeline import Pipeline
 
 
 def main():

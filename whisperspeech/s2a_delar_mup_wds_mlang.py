@@ -31,8 +31,8 @@ import json
 from fastprogress import progress_bar, master_bar
 
 # %% ../nbs/4B. Multi-language semantic to acoustic token modeling.ipynb 4
-from . import inference
-from .modules import *
+import inference
+from modules import *
 
 
 # %% ../nbs/4B. Multi-language semantic to acoustic token modeling.ipynb 8
