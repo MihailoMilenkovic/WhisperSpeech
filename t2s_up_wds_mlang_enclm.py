@@ -7,7 +7,6 @@ __all__ = [
     "T2SEmbedding",
     "Encoder",
     "TSARTransformer",
-    "make_model",
 ]
 
 # %% ../nbs/5B. Multi-lang text to semantic token modeling.ipynb 1
@@ -644,50 +643,3 @@ class TSARTransformer(nn.Module):
             if (toks[:, i] == self.stoks_codes - 1).all():
                 return toks[:, :i]
         return toks
-
-
-# %% ../nbs/5B. Multi-lang text to semantic token modeling.ipynb 16
-def _make_model(size: str, tunables: Tunables = Tunables(), dataset=None, **kwargs):
-    kwargs = dict(
-        stoks_len=dataset.stoks_len,
-        ttoks_len=dataset.ttoks_len,
-        tunables=tunables,
-        **kwargs
-    )
-    if "stoks_codes" not in kwargs:
-        kwargs["stoks_codes"] = dataset.stoks_codes
-    if size == "micro":
-        return TSARTransformer(depth=2, n_head=3, ffn_mult=1, **kwargs)
-    if size == "tiny":
-        return TSARTransformer(depth=4, n_head=6, **kwargs)
-    if size == "base":
-        return TSARTransformer(depth=6, n_head=8, **kwargs)
-    if size == "small":
-        return TSARTransformer(depth=12, n_head=12, **kwargs)
-    if size == "small+":
-        return TSARTransformer(depth=12, n_head=16, **kwargs)
-    if size == "medium":
-        return TSARTransformer(depth=24, n_head=16, **kwargs)
-
-
-def make_model(
-    size: str,
-    frozen_embeddings_model: str = None,
-    tunables: Tunables = Tunables(),
-    dataset: torch.utils.data.Dataset = None,
-):
-    from . import vq_stoks
-
-    if frozen_embeddings_model:
-        vqmodel = vq_stoks.RQBottleneckTransformer.load_model(frozen_embeddings_model)
-        model = _make_model(
-            size,
-            tunables,
-            dataset,
-            stoks_codes=vqmodel.vq_codes + 1,
-            stoks_width=vqmodel.rq.layers[0]._codebook.embed[0].shape[-1],
-        )
-        model.load_frozen_semantic_embeddings(vqmodel)
-    else:
-        model = _make_model(size, tunables, dataset, mode=mode)
-    return model
