@@ -20,15 +20,12 @@ import dataclasses
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import numpy as np
-from torch.profiler import profile, record_function, ProfilerActivity, schedule
+from torch.profiler import record_function
 from fastcore.basics import store_attr
 from huggingface_hub import hf_hub_download
 
 # %% ../nbs/4B. Multi-language semantic to acoustic token modeling.ipynb 3
 from pathlib import Path
-import json
-from fastprogress import progress_bar, master_bar
 
 # %% ../nbs/4B. Multi-language semantic to acoustic token modeling.ipynb 4
 import inference
@@ -596,7 +593,6 @@ class SADelARTransformer(nn.Module):
         bs=1,
         T=0.7,
         top_k=None,
-        show_progress_bar=True,
         step=None,
         subsample_enc=False,
     ):
@@ -621,8 +617,6 @@ class SADelARTransformer(nn.Module):
             for i in range(self.quantizers):
                 toks[:, i, 1 + i : start + i + 1] = atoks_prompt[:, i]
         it = range(start + 1, min(N, self.ctx_n - 1))
-        if show_progress_bar:
-            it = progress_bar(it)
         with record_function("encode"):
             stoks, speakers = [x.repeat(bs, 1) for x in (stoks, speakers)]
             xenc, xenc_positions, _ = self.run_encoder(stoks, speakers)

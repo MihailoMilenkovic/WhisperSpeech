@@ -38,6 +38,7 @@ def main():
         # cps=10,
         speaker=speaker_file,
     )
+    print(f"SAVED AUDIO TO {save_path}")
 
 
 if __name__ == "__main__":
