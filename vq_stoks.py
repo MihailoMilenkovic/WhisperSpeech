@@ -91,7 +91,7 @@ def tokenize_text(samples, ttoks_size=200, model="base.en", language="en"):
 
 
 # %% ../nbs/2B. Whisper quantization (semantic token) model.ipynb 28
-from whisperspeech.modules import *
+from modules import *
 
 # %% ../nbs/2B. Whisper quantization (semantic token) model.ipynb 29
 import dataclasses

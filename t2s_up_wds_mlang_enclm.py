@@ -14,7 +14,6 @@ __all__ = [
 import dataclasses
 import random
 import math
-import itertools
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -27,8 +26,9 @@ from fastprogress import progress_bar
 from pathlib import Path
 
 # %% ../nbs/5B. Multi-lang text to semantic token modeling.ipynb 2
-from whisperspeech.modules import *
-from whisperspeech import languages, inference
+from modules import *
+import languages
+import inference
 
 # %% ../nbs/5B. Multi-lang text to semantic token modeling.ipynb 6
 import re

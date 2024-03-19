@@ -690,7 +690,7 @@ def make_model(
     dataset=None,
 ):
     from encodec.model import EncodecModel
-    from whisperspeech import vq_stoks
+    import vq_stoks
 
     amodel = EncodecModel.encodec_model_24khz() if frozen_acoustic_embeddings else None
     vqmodel = (

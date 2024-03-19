@@ -5,9 +5,10 @@ __all__ = ["Vocoder"]
 
 # %% ../nbs/6. Quality-boosting vocoder.ipynb 1
 from vocos import Vocos
-from whisperspeech import inference
 import torch
 import torchaudio
+
+import inference
 
 
 # %% ../nbs/6. Quality-boosting vocoder.ipynb 2
