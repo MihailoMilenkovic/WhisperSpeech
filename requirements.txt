@@ -1,22 +1,9 @@
 vocos 
 speechbrain<1.0
-requests 
 huggingface_hub 
-fastprogress
 fastcore
 torch>=2 
 torchaudio 
-soundfile
 #dev requirements
 vector_quantize_pytorch==1.6.22 
 openai-whisper 
-webdataset 
-wandb
-whisperx@git+https://github.com/m-bain/whisperx.git
-whisper_normalizer 
-jiwer
-matplotlib 
-pandas 
-pyarrow 
-scikit-learn 
-ipython
