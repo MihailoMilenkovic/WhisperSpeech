@@ -27,6 +27,7 @@ def main():
         args.t2s_model_ckpt_dir,
         args.speaker_embedding_file,
     )
+    torch.manual_seed(42)
     tts_pipe = Pipeline(s2a_ref=s2a_ckpt, t2s_ref=t2s_ckpt)
 
     save_path = "output.wav"
