@@ -498,16 +498,6 @@ class SADelARTransformer(nn.Module):
     def set_extra_state(self, st):
         self.speaker_map = st["speaker_map"]
 
-    def save_model(self, fname):
-        torch.save(
-            dict(
-                config=self.__stored_args__,
-                tunables=dataclasses.asdict(self.tunables),
-                state_dict=self.state_dict(),
-            ),
-            fname,
-        )
-
     def switch_dtypes(self, dtype=torch.float16):
         self.dtype = dtype
         for n, m in self.named_modules():

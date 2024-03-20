@@ -1,5 +1,4 @@
 vocos 
-huggingface_hub 
 torch>=2 
 torchaudio 
 soundfile
