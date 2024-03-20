@@ -30,7 +30,7 @@ def main():
         args.speaker_embedding_file,
     )
     torch.manual_seed(42)
-    tts_pipe = Pipeline(s2a_ref=s2a_ckpt, t2s_ref=t2s_ckpt)
+    tts_pipe = Pipeline(s2a_location=s2a_ckpt, t2s_location=t2s_ckpt)
 
     save_path = "output.wav"
     tts_pipe.generate_to_file(

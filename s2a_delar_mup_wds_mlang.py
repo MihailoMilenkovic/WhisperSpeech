@@ -477,27 +477,10 @@ class SADelARTransformer(nn.Module):
     @classmethod
     def load_model(
         cls,
-        ref="collabora/whisperspeech:s2a-q4-small-en+pl.model",
-        repo_id=None,
-        filename=None,
         local_filename=None,
-        spec=None,
         device=None,
     ):
-        if (
-            repo_id is None
-            and filename is None
-            and local_filename is None
-            and spec is None
-        ):
-            if ":" in ref:
-                repo_id, filename = ref.split(":", 1)
-            else:
-                local_filename = ref
-        if not local_filename and spec is None:
-            local_filename = hf_hub_download(repo_id=repo_id, filename=filename)
-        if spec is None:
-            spec = torch.load(local_filename, map_location=device)
+        spec = torch.load(local_filename, map_location=device)
         if "_extra_state" not in spec["state_dict"] and "speaker_map" in spec["config"]:
             spec["state_dict"]["_extra_state"] = {
                 "speaker_map": spec["config"]["speaker_map"]
@@ -514,18 +497,6 @@ class SADelARTransformer(nn.Module):
 
     def set_extra_state(self, st):
         self.speaker_map = st["speaker_map"]
-
-    def load_checkpoint(self, local_filename_or_obj):
-        if isinstance(local_filename_or_obj, (str, Path)):
-            spec = torch.load(local_filename_or_obj, map_location="cpu")
-        else:
-            spec = local_filename_or_obj
-        assert (
-            "pytorch-lightning_version" in spec
-        ), "not a valid PyTorch Lightning checkpoint"
-        state_dict = {k.replace("model.", ""): v for k, v in spec["state_dict"].items()}
-        self.load_state_dict(state_dict)
-        return self
 
     def save_model(self, fname):
         torch.save(
