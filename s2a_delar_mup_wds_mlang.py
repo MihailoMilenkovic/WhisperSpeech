@@ -21,7 +21,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.profiler import record_function
-from fastcore.basics import store_attr
 from huggingface_hub import hf_hub_download
 
 # %% ../nbs/4B. Multi-language semantic to acoustic token modeling.ipynb 3
@@ -239,9 +238,19 @@ class SADelARTransformer(nn.Module):
         self.quantizers = quantizers
         self.codes = 1024
         width = n_head * head_width
-        store_attr(
-            "depth,ctx_n,stoks_len,stoks_codes,stoks_width,spk_width,atoks_width,n_head,head_width,ffn_mult,quantizers,speaker_map"
-        )
+        self.depth = depth
+        self.ctx_n = ctx_n
+        self.stoks_len = stoks_len
+        self.stoks_codes = stoks_codes
+        self.stoks_width = stoks_width
+        self.spk_width = spk_width
+        self.atoks_width = atoks_width
+        self.n_head = n_head
+        self.head_width = head_width
+        self.ffn_mult = ffn_mult
+        self.quantizers = quantizers
+        self.speaker_map = speaker_map
+
         self.width = width
         self.base_width = 3 * head_width
         self.tunables = tunables

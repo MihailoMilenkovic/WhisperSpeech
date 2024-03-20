@@ -19,8 +19,6 @@ import torch.nn.functional as F
 from torch.profiler import record_function
 
 from huggingface_hub import hf_hub_download
-from fastcore.basics import store_attr
-from fastprogress import progress_bar
 
 from pathlib import Path
 
@@ -236,9 +234,19 @@ class TSARTransformer(nn.Module):
         tunables=Tunables(),
     ):
         super().__init__()
-        store_attr(
-            "depth,n_head,head_width,ffn_mult,stoks_width,ttoks_width,ttoks_len,stoks_len,ttoks_codes,stoks_codes"
-        )
+        # store_attr(
+        #     "depth,n_head,head_width,ffn_mult,stoks_width,ttoks_width,ttoks_len,stoks_len,ttoks_codes,stoks_codes"
+        # )
+        self.depth = depth
+        self.n_head = n_head
+        self.head_width = head_width
+        self.ffn_mult = ffn_mult
+        self.stoks_width = stoks_width
+        self.ttoks_width = ttoks_width
+        self.ttoks_len = ttoks_len
+        self.stoks_len = stoks_len
+        self.ttoks_codes = ttoks_codes
+        self.stoks_codes = stoks_codes
 
         width = n_head * head_width
         self.width = width
@@ -532,7 +540,6 @@ class TSARTransformer(nn.Module):
         T=0.7,
         top_k=None,
         step=None,
-        show_progress_bar=True,
     ):
         self.ensure_tokenizer()
         N = N or self.stoks_len
@@ -576,8 +583,6 @@ class TSARTransformer(nn.Module):
             toks[:, 1 : len(stoks_prompt) + 1] = stoks_prompt
             start = len(stoks_prompt)
         it = range(start + 1, N - 1)
-        if show_progress_bar:
-            it = progress_bar(it)
 
         toks_positions = torch.arange(N, device=dev)
         with record_function("encode"):
@@ -615,7 +620,7 @@ class TSARTransformer(nn.Module):
         return toks[:, 1:]
 
     @torch.no_grad()
-    def generate_batch(self, txts, N=None, T=1.1, top_k=7, show_progress_bar=True):
+    def generate_batch(self, txts, N=None, T=1.1, top_k=7):
         self.ensure_tokenizer()
         N = self.stoks_len
         dev = self.device
@@ -629,8 +634,6 @@ class TSARTransformer(nn.Module):
         ttoks = torch.cat(ttoks, dim=0)
         toks = torch.zeros((len(ttoks), N), dtype=torch.long, device=dev)
         it = range(N)
-        if show_progress_bar:
-            it = progress_bar(it)
         for i in it:
             p, _ = self(ttoks, toks[:, :i], loss=None)
             last_p = p[:, -1]
