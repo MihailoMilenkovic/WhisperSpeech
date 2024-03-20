@@ -1,5 +1,4 @@
 vocos 
-speechbrain<1.0
 huggingface_hub 
 torch>=2 
 torchaudio 
