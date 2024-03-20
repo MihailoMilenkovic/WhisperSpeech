@@ -9,13 +9,15 @@ def main():
     parser.add_argument(
         "--s2a-model-ckpt-dir",
         type=str,
-        default="collabora/whisperspeech:s2a-q4-tiny-en+pl.model",
+        default="/net/llm-compiles/project-apex/torch-ckpt/whisperspeech/s2a-q4-tiny-en+pl.model",
+        # default="/home/mmilenkovic/git/data/whisperspeech/s2a-q4-tiny-en+pl.model",
         help="Path to s2a model checkpoint",
     )
     parser.add_argument(
         "--t2s-model-ckpt-dir",
         type=str,
-        default=None,
+        default="/net/llm-compiles/project-apex/torch-ckpt/whisperspeech/t2s-tiny-en+pl.model",
+        # default="/home/mmilenkovic/git/data/whisperspeech/t2s-tiny-en+pl.model",
         help="Path to t2s model checkpoint",
     )
     parser.add_argument("--speaker-embedding-file", type=str, default=None)
@@ -33,7 +35,7 @@ def main():
     save_path = "output.wav"
     tts_pipe.generate_to_file(
         save_path,
-        "This is a test",
+        "Testing",
         lang=language,
         # cps=10,
         speaker=speaker_file,
